@@ -1,0 +1,44 @@
+
+{% extends 'base.html' %}
+{% block style %}
+
+<style>
+  div.card{
+  display : inline-block;
+  min-height : 400px;
+  max-height : 400px;
+  width : 300px;
+  }
+
+.card img{
+height : 220px;
+width : 280px;
+}
+</style>
+{% endblock %}
+{% block content %}
+
+<div class = "container mx-4">
+
+{% for i in list %}
+
+<div class="card col-md-3 mt-5" style="width: 18rem;">
+ <div class="text-center"><img src="/media/{{i.images}}/" class="card-img-top"  alt="..."></div>
+  <div class="card-body">
+    <h5 class="card-title text-center">{{i.title}}</h5>
+
+    <div class="card-text text-center">{{i.created_at}}</div>
+
+<!--  Here like container begins -->
+
+
+<!--    Here like contanier ends -->
+   <p class="text-center"><a href="/blogs/viewpage/{{i.slug}}/" class="btn btn-primary">Read More</a></p>
+
+  </div>
+</div>
+
+{% endfor %}
+  </div>
+
+{% endblock %}

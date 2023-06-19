@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% block style %}
+<style>
+.box{
+display:flex;
+flex-direction:column;
+}
+.img{
+height:400px;
+width:450px;}
+
+ button.btn {    /* changed */
+  background-color: DodgerBlue;
+  width:100px;
+
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+{% load humanize %}
+{% load extras %}
+   {% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li class="">{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<div class="container box mt-4">
+<div class="  row mt-5 mx-5">
+ <h2 class="text-center">{{post.title}}</h2>
+    <div class="text-center mt-4"><img src="/media/{{post.images}}/" class="img"   alt="..."></div>
+    <div class="text-center ">Created by {{post.user}} {{post.created_at}}  {{post.views}} Views</div>
+    <div class="container mt-5">
+        <div class=" container mx-3 text-center">{{post.content| safe}}</div>
+    <div class="like mx-5 mt-5 container">
+
+
+          <form method="POST">
+              {% csrf_token %}
+          <button>
+              {% if msg %}
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+</svg>
+              {% else %}
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+  <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+</svg>
+              {% endif %}
+              </button>
+              </form>
+        <span class="no-of-likes">{{post.likes.count}} Likes</span>
+
+
+
+  </div>
+    </div>
+</div>
+
+<h3 class="mt-2">Comment</h3>
+    {% for i in comment %}
+      <div class="row mt-3">
+          <div class="col-md-1">
+          <div><img src="/media/images/muskan_.jpg/" alt="" height="40" width="40" srcset=""></div>
+          </div>
+          <div class="col-md-11">
+          <div> {{i.user}}   {{i.timestamp | naturaltime }}</div>
+          <div>{{i.comment}}</div>
+          </div>
+           <p>
+  <button class="btn btn-small  btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample{{i.id}}" aria-expanded="false" aria-controls="collapseExample">
+   Reply
+  </button>
+
+
+</p><div class="collapse" id="collapseExample{{i.id}}">
+  <div class="card card-body reply">
+ <div class="replybox">
+
+{% for reply,value in reply_dict.items%}
+     {% if reply == i%}
+     {% for r in value %}
+     <div>{{r.user}}  {{r.timestamp | naturaltime}}</div>
+     <div>{{r}} </div>
+     <br>
+     {% endfor %}
+     {% endif %}
+     {% endfor %}
+          </div>
+       {% if request.user.is_authenticated %}
+<form action="{% url 'comment' post.slug %}" method="post">
+{% csrf_token %}
+    <div class="row mt-5">
+     <input name="comment"  class="col-4" placeholder="Enter your comment" type="text">
+       <button  class ="col-2" type="submit" >Comment</button>
+        <input type="hidden" name="parent" value ="{{i.id}}">
+    </div>
+
+
+</form>
+      {% endif %}
+  </div>
+</div>
+    {% endfor %}
+
+</div>
+
+
+
+
+
+
+ {% if request.user.is_authenticated %}
+<form action="{% url 'comment' post.slug %}" method="post">
+{% csrf_token %}
+    <div class="row mt-5">
+     <input name="comment"  class="col-4" placeholder="Enter your comment" type="text">
+       <button  class ="col-2" type="submit" >Comment</button>
+    </div>
+<div class="mt-5"></div>
+
+</form>
+    {% endif %}
+  </div>
+
+<!--</div>-->
+
+{% endblock %}

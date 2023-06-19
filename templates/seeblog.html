@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5 pt-5">
+
+  <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Sno</th>
+      <th scope="col">Blog Title</th>
+      <th scope="col">Created at</th>
+
+      <th scope ="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for b in blogs %}
+    <tr>
+      <th scope="row">{{forloop.counter}}</th>
+      <td>{{b.title}}</td>
+      <td>{{b.created_at}}</td>
+
+      <td>
+        <a href="{% url 'update' b.slug %}"><button class="btn btn-success">Update</button></a>
+        <a href="{% url 'delete' b.id  %} "><button class = "btn btn-danger">Delete</button> </a>
+      </td>
+    </tr>
+{% endfor %}
+  </tbody>
+</table>
+
+</div>
+{% endblock %}
